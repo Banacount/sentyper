@@ -8,3 +8,4 @@ after that you could just run `make`.
 
 ### Here's the demo gif of the application
 ![Quick-Demo](docs/sentyper-demo.gif)
+![Quick-Demo-2](docs/sentyper-demo-2.gif)
