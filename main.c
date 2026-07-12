@@ -1,22 +1,36 @@
 #include "helpers.h"
-#include <time.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 
 /*
  * Tasks:
- *
- * - Refactor later if you can lmao.
+ *  
  *
  * Promises:
  *
- * - [Game mode update] Infinite mode.
+ *  - [Game mode update] Infinite mode.
+ *	- Refactor if needed.
  *
  * */
 
-int main () 
+int main (int args_count, char * args[]) 
 {
-	struct timespec start, end;
+	// Print the arguments for some bullshit.
+	/*
+	for (int i = 1; i < args_count; ++i)
+	{
+		printf("%s\n", args[i]);
+	}
+	*/
+
+	// Hehe (will add later fasho)
+	if (args_count >= 2) {
+		if (strncmp("-i", args[1], 2) == 0) 
+			printf("Still work in progress.. for now hehe\n");
+	} 
+
+	double start_sec, end_sec, start_nanosec, end_nanosec;
 
 	// Get sentence
 	char sentence[500];
@@ -26,10 +40,11 @@ int main ()
 	// Throw away input and clear the line
 	int throw_away;
 	while ((throw_away = getchar()) != '\n' && throw_away != EOF);
-	printf("\033[A\33[2K\r");
+	printf("\033[A\33[2K\r"); // clear the line
 
 	// Start time
-	clock_gettime(CLOCK_MONOTONIC, &start);
+	start_sec = currentSecondsTimeInDouble();
+	start_nanosec = currentNanosecondsTimeInDouble();
 
 	printf("\033[0;32m"); // change: green text
 	printf("| %s\n> ", sentence);
@@ -64,15 +79,19 @@ int main ()
 	}
 
 	printf("\n");
-	wrongs += sentence_count - check_loop;
-	clock_gettime(CLOCK_MONOTONIC, &end);
 
-	double secs = (end.tv_sec - start.tv_sec);
-	double nanosecs = (end.tv_nsec - start.tv_nsec);
+	wrongs += sentence_count - check_loop;
+	end_sec = currentSecondsTimeInDouble();
+	end_nanosec = currentNanosecondsTimeInDouble();
+
+	double secs = (end_sec - start_sec);
+	double nanosecs = (end_nanosec - start_nanosec);
 	double elapsed = secs + nanosecs * 1e-9;
 	double wpm = (((double)sentence_count / 5) - wrongs) / (elapsed / 60);
 
 	printf("\033[0;33m"); // change: yellow text
+
+	// Show result info
 	printf("\nWPM(standard): %.2f | Elapsed(sec): %.2f | Mistakes: %d\n", 
 			wpm, elapsed, wrongs);
 
