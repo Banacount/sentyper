@@ -43,3 +43,4 @@ double currentNanosecondsTimeInDouble ()
 	clock_gettime(CLOCK_MONOTONIC, &current);
 	return current.tv_nsec;
 }
+

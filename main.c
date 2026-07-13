@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 /*
  * Tasks:
@@ -9,38 +10,49 @@
  *
  * Promises:
  *
- *  - [Game mode update] Infinite mode.
- *	- Refactor if needed.
+ *	- Refactor the infinite mode to be more modular.
  *
  * */
+void regularGame (bool * is_infinite);
 
 int main (int args_count, char * args[]) 
 {
-	// Print the arguments for some bullshit.
-	/*
-	for (int i = 1; i < args_count; ++i)
-	{
-		printf("%s\n", args[i]);
-	}
-	*/
+	bool is_infinite = false;
 
-	// Hehe (will add later fasho)
 	if (args_count >= 2) {
 		if (strncmp("-i", args[1], 2) == 0) 
-			printf("Still work in progress.. for now hehe\n");
+			is_infinite = true;
 	} 
 
+	if (is_infinite)
+		while (is_infinite) regularGame(&is_infinite);
+	else
+		regularGame(&is_infinite);
+}
+
+void regularGame (bool * is_infinite)
+{
 	double start_sec, end_sec, start_nanosec, end_nanosec;
+	bool endGame = false;
 
 	// Get sentence
 	char sentence[500];
 	int sentence_count = randomSentence(sentence, sizeof(sentence));
-	printf("[ ENTER TO START (WARNING: MISTAKES MAY RESULT IN NEGATIVE WPM) ]");
+	printf("[ 'ENTER' TO START and 'Q' to EXIT (WARNING: MISTAKES COUNTS) ]");
 
 	// Throw away input and clear the line
 	int throw_away;
-	while ((throw_away = getchar()) != '\n' && throw_away != EOF);
+	while ((throw_away = getchar()) != '\n' && throw_away != EOF)
+	{
+		if (throw_away == 'Q') {
+			endGame = true;
+			*is_infinite = false;
+			break;
+		}
+	}
+
 	printf("\033[A\33[2K\r"); // clear the line
+	if (endGame) return;
 
 	// Start time
 	start_sec = currentSecondsTimeInDouble();
@@ -95,5 +107,6 @@ int main (int args_count, char * args[])
 	printf("\nWPM(standard): %.2f | Elapsed(sec): %.2f | Mistakes: %d\n", 
 			wpm, elapsed, wrongs);
 
-	return 0;
+	printf("\033[0m"); // change: default text
+	return;
 }
