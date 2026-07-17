@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MIN_SENTENCE_COUNT 0
-#define MAX_SENTENCE_COUNT 7
 
 
 int randomRangeInt (int min, int max)
